@@ -3,47 +3,40 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"net"
+
+	"github.com/miekg/dns"
 )
 
 func main() {
 	flag.Parse()
-	domain := flag.Arg(0)
-	fmt.Println("fqdn: " + domain)
+	fqdn := flag.Arg(0)
+	fmt.Println("fqdn: " + fqdn)
 
-	// NS
-	nss, error := net.LookupNS(domain)
-	if error != nil {
-		// log error
-	}
-	for _, ns := range nss {
-		fmt.Printf("Name Server: %v\n", ns.Host)
-	}
-
-	// A
-	ips, error := net.LookupIP(domain)
-	if error != nil {
-		// log error
-	}
-	for _, ip := range ips {
-		fmt.Printf("A: %v\n", ip)
+	// refs: https://github.com/miekg/dns/blob/master/types.go#L2
+	qtypes := []uint16{
+		dns.TypeNS,
+		dns.TypeA,
+		dns.TypeMX,
+		dns.TypeTXT,
+		dns.TypeCNAME,
 	}
 
-	// MX
-	mxs, error := net.LookupMX(domain)
-	if error != nil {
-		// log error
-	}
-	for _, mx := range mxs {
-		fmt.Printf("MX: %v\n", mx.Host)
-	}
+	config, _ := dns.ClientConfigFromFile("/etc/resolv.conf")
+	c := new(dns.Client)
+	m := new(dns.Msg)
 
-	// TXT
-	txts, error := net.LookupTXT(domain)
-	if error != nil {
-		// log error
-	}
-	for _, txt := range txts {
-		fmt.Printf("TXT: %v\n", txt)
+	for _, qtype := range qtypes {
+		m.SetQuestion(dns.Fqdn(flag.Arg(0)), qtype)
+
+		r, _, err := c.Exchange(m, net.JoinHostPort(config.Servers[0], config.Port))
+		if r == nil {
+			log.Fatalf("*** error: %s\n", err.Error())
+		}
+
+		for _, a := range r.Answer {
+			fmt.Printf("%v\n", a)
+		}
 	}
 }
