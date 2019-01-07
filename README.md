@@ -13,17 +13,17 @@ $ domain-info FQDN
 ```sh
 $ domain-info yahoo.co.jp
 fqdn: yahoo.co.jp
-Name Server: ns12.yahoo.co.jp.
-Name Server: ns11.yahoo.co.jp.
-Name Server: ns01.yahoo.co.jp.
-Name Server: ns02.yahoo.co.jp.
-A: 182.22.59.229
-A: 183.79.135.206
-MX: mx2.mail.yahoo.co.jp.
-MX: mx3.mail.yahoo.co.jp.
-MX: mx5.mail.yahoo.co.jp.
-MX: mx1.mail.yahoo.co.jp.
-TXT: v=spf1 include:spf.yahoo.co.jp ~all
+yahoo.co.jp.	223	IN	NS	ns11.yahoo.co.jp.
+yahoo.co.jp.	223	IN	NS	ns02.yahoo.co.jp.
+yahoo.co.jp.	223	IN	NS	ns01.yahoo.co.jp.
+yahoo.co.jp.	223	IN	NS	ns12.yahoo.co.jp.
+yahoo.co.jp.	33	IN	A	182.22.59.229
+yahoo.co.jp.	33	IN	A	183.79.135.206
+yahoo.co.jp.	804	IN	MX	10 mx5.mail.yahoo.co.jp.
+yahoo.co.jp.	804	IN	MX	10 mx1.mail.yahoo.co.jp.
+yahoo.co.jp.	804	IN	MX	10 mx2.mail.yahoo.co.jp.
+yahoo.co.jp.	804	IN	MX	10 mx3.mail.yahoo.co.jp.
+yahoo.co.jp.	816	IN	TXT	"v=spf1 include:spf.yahoo.co.jp ~all"
 ```
 
 ## Installation
